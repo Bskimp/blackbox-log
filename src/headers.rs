@@ -355,7 +355,9 @@ impl Firmware {
         let (fw, is_supported) = match kind.as_deref() {
             Some("betaflight") => (
                 Firmware::Betaflight(version),
-                crate::BETAFLIGHT_SUPPORT.iter().any(|r| r.contains(&version)),
+                crate::BETAFLIGHT_SUPPORT
+                    .iter()
+                    .any(|r| r.contains(&version)),
             ),
             Some("inav") => (
                 Firmware::Inav(version),
@@ -499,7 +501,9 @@ impl From<Firmware> for InternalFirmware {
                 ..
             }) => Self::Betaflight2025_12,
             Firmware::Betaflight(FirmwareVersion {
-                major: 2026, minor: 6, ..
+                major: 2026,
+                minor: 6,
+                ..
             }) => Self::Betaflight2026_6,
             Firmware::Inav(FirmwareVersion { major: 5, .. }) => Self::Inav5,
             Firmware::Inav(FirmwareVersion { major: 6, .. }) => Self::Inav6,

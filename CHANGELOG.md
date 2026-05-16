@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Betaflight's date-versioned firmware scheme (`2025.12.0`,
+  `2026.6.0-alpha`, etc.), including pre-release suffixes
+  (`-alpha` / `-beta` / `-rc`).
+
+### Changed
+
+- `FirmwareVersion::major` widened from `u8` to `u16` to accommodate
+  year-based major versions.
+- `BETAFLIGHT_SUPPORT` is now a `&[Range<FirmwareVersion>]` (slice of
+  windows) instead of a single contiguous `Range`, since supported
+  Betaflight versions are no longer contiguous after the version-scheme
+  switch.
+
 ## [0.4.3] - 2024.04.13
 
 ### Added
