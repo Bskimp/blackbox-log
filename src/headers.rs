@@ -355,7 +355,7 @@ impl Firmware {
         let (fw, is_supported) = match kind.as_deref() {
             Some("betaflight") => (
                 Firmware::Betaflight(version),
-                crate::BETAFLIGHT_SUPPORT.contains(&version),
+                crate::BETAFLIGHT_SUPPORT.iter().any(|r| r.contains(&version)),
             ),
             Some("inav") => (
                 Firmware::Inav(version),
@@ -391,13 +391,15 @@ impl PartialOrd for Firmware {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct FirmwareVersion {
-    pub major: u8,
+    // u16 because Betaflight's date-versioned scheme uses the calendar year
+    // (e.g. 2025.12.0, 2026.6.0) and overflows u8.
+    pub major: u16,
     pub minor: u8,
     pub patch: u8,
 }
 
 impl FirmwareVersion {
-    pub const fn new(major: u8, minor: u8, patch: u8) -> Self {
+    pub const fn new(major: u16, minor: u8, patch: u8) -> Self {
         Self {
             major,
             minor,
@@ -406,11 +408,15 @@ impl FirmwareVersion {
     }
 
     fn parse(s: &str) -> Option<Self> {
-        let mut components = s.splitn(3, '.').map(|s| s.parse().ok());
+        // Strip optional pre-release suffix introduced by BF 2025.12+
+        // (e.g. "-alpha", "-beta", "-rc1") before parsing components.
+        let s = s.split_once('-').map_or(s, |(prefix, _)| prefix);
 
-        let major = components.next()??;
-        let minor = components.next()??;
-        let patch = components.next()??;
+        let mut components = s.splitn(3, '.');
+
+        let major = components.next()?.parse().ok()?;
+        let minor = components.next()?.parse().ok()?;
+        let patch = components.next()?.parse().ok()?;
 
         Some(Self {
             major,
@@ -443,6 +449,8 @@ pub(crate) enum InternalFirmware {
     Betaflight4_3,
     Betaflight4_4,
     Betaflight4_5,
+    Betaflight2025_12,
+    Betaflight2026_6,
     Inav5,
     Inav6,
     Inav7,
@@ -455,7 +463,9 @@ impl InternalFirmware {
             Self::Betaflight4_2
             | Self::Betaflight4_3
             | Self::Betaflight4_4
-            | Self::Betaflight4_5 => true,
+            | Self::Betaflight4_5
+            | Self::Betaflight2025_12
+            | Self::Betaflight2026_6 => true,
             Self::Inav5 | Self::Inav6 | Self::Inav7 | Self::Inav8 => false,
         }
     }
@@ -483,6 +493,14 @@ impl From<Firmware> for InternalFirmware {
             Firmware::Betaflight(FirmwareVersion {
                 major: 4, minor: 5, ..
             }) => Self::Betaflight4_5,
+            Firmware::Betaflight(FirmwareVersion {
+                major: 2025,
+                minor: 12,
+                ..
+            }) => Self::Betaflight2025_12,
+            Firmware::Betaflight(FirmwareVersion {
+                major: 2026, minor: 6, ..
+            }) => Self::Betaflight2026_6,
             Firmware::Inav(FirmwareVersion { major: 5, .. }) => Self::Inav5,
             Firmware::Inav(FirmwareVersion { major: 6, .. }) => Self::Inav6,
             Firmware::Inav(FirmwareVersion { major: 7, .. }) => Self::Inav7,
@@ -759,5 +777,26 @@ mod tests {
     fn invalid_utf8() {
         let mut b = Reader::new(b"H \xFF:\xFF\n");
         parse_header(&mut b).unwrap();
+    }
+
+    #[test]
+    fn parse_betaflight_2026_alpha() {
+        let result = Firmware::parse("Betaflight 2026.6.0-alpha (norevision) STM32F405");
+        let fw = result.expect("expected Ok for BF 2026.6.0-alpha");
+        match fw {
+            Firmware::Betaflight(v) => {
+                assert_eq!(v.major, 2026);
+                assert_eq!(v.minor, 6);
+                assert_eq!(v.patch, 0);
+            }
+            other => panic!("expected Betaflight, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn parse_betaflight_2025_12_stable() {
+        let result = Firmware::parse("Betaflight 2025.12.0 (norevision) STM32F405");
+        let fw = result.expect("expected Ok for BF 2025.12.0");
+        assert_eq!(fw, Firmware::Betaflight(FirmwareVersion::new(2025, 12, 0)));
     }
 }

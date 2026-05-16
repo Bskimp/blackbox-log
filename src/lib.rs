@@ -116,7 +116,13 @@ use self::reader::Reader;
 /// The first line of any blackbox log.
 const MARKER: &[u8] = b"H Product:Blackbox flight data recorder by Nicholas Sherlock\n";
 
-const BETAFLIGHT_SUPPORT: Range<FirmwareVersion> =
-    FirmwareVersion::new(4, 2, 0)..FirmwareVersion::new(4, 6, 0);
+// Betaflight switched from semver-style x.y.z to a YYYY.M.P date-versioned
+// scheme starting with 2025.12, so supported versions are no longer a single
+// contiguous range.
+const BETAFLIGHT_SUPPORT: &[Range<FirmwareVersion>] = &[
+    FirmwareVersion::new(4, 2, 0)..FirmwareVersion::new(4, 6, 0),
+    FirmwareVersion::new(2025, 12, 0)..FirmwareVersion::new(2026, 0, 0),
+    FirmwareVersion::new(2026, 6, 0)..FirmwareVersion::new(2026, 7, 0),
+];
 const INAV_SUPPORT: Range<FirmwareVersion> =
     FirmwareVersion::new(5, 0, 0)..FirmwareVersion::new(9, 0, 0);
