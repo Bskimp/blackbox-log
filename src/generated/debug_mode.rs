@@ -39,6 +39,8 @@ pub enum DebugMode {
     AutoTrim,
     /// `AUTOTUNE`
     AutoTune,
+    /// `AUTOLAND`
+    Autoland,
     /// `BARO`
     Baro,
     /// `BATTERY`
@@ -135,6 +137,8 @@ pub enum DebugMode {
     GpsRescueTracking,
     /// `GPS_RESCUE_VELOCITY`
     GpsRescueVelocity,
+    /// `GPS_RESCUE_WING`
+    GpsRescueWing,
     /// `GYRO`
     Gyro,
     /// `GYRO_CALIBRATION`
@@ -225,6 +229,8 @@ pub enum DebugMode {
     RxStateTime,
     /// `RX_TIMING`
     RxTiming,
+    /// `S_TERM`
+    STerm,
     /// `SAG_COMP_VOLTAGE`
     SagCompVoltage,
     /// `SBUS`
@@ -237,10 +243,14 @@ pub enum DebugMode {
     SchedulerDeterminism,
     /// `SDIO`
     Sdio,
+    /// `SERVO_AUTOTRIM`
+    ServoAutotrim,
     /// `SMARTAUDIO`
     Smartaudio,
     /// `SMITH_PREDICTOR`
     SmithPredictor,
+    /// `SPA`
+    Spa,
     /// `SPM_CELLS`
     SpmCells,
     /// `SPM_VARIO`
@@ -251,6 +261,8 @@ pub enum DebugMode {
     Stack,
     /// `TIMING_ACCURACY`
     TimingAccuracy,
+    /// `TPA`
+    Tpa,
     /// `USB`
     Usb,
     /// `VIBE`
@@ -261,6 +273,8 @@ pub enum DebugMode {
     VtxTramp,
     /// `WING_LAUNCH`
     WingLaunch,
+    /// `WING_SETPOINT`
+    WingSetpoint,
 }
 #[allow(unused_qualifications)]
 impl crate::units::Flag for DebugMode {
@@ -284,6 +298,7 @@ impl crate::units::Flag for DebugMode {
             Self::AutoLevel => "AUTOLEVEL",
             Self::AutoTrim => "AUTOTRIM",
             Self::AutoTune => "AUTOTUNE",
+            Self::Autoland => "AUTOLAND",
             Self::Baro => "BARO",
             Self::Battery => "BATTERY",
             Self::BlackboxOutput => "BLACKBOX_OUTPUT",
@@ -332,6 +347,7 @@ impl crate::units::Flag for DebugMode {
             Self::GpsRescueThrottlePid => "GPS_RESCUE_THROTTLE_PID",
             Self::GpsRescueTracking => "GPS_RESCUE_TRACKING",
             Self::GpsRescueVelocity => "GPS_RESCUE_VELOCITY",
+            Self::GpsRescueWing => "GPS_RESCUE_WING",
             Self::Gyro => "GYRO",
             Self::GyroCalibration => "GYRO_CALIBRATION",
             Self::GyroFiltered => "GYRO_FILTERED",
@@ -377,24 +393,29 @@ impl crate::units::Flag for DebugMode {
             Self::RxSpektrumSpi => "RX_SPEKTRUM_SPI",
             Self::RxStateTime => "RX_STATE_TIME",
             Self::RxTiming => "RX_TIMING",
+            Self::STerm => "S_TERM",
             Self::SagCompVoltage => "SAG_COMP_VOLTAGE",
             Self::Sbus => "SBUS",
             Self::Sbus2 => "SBUS2",
             Self::Scheduler => "SCHEDULER",
             Self::SchedulerDeterminism => "SCHEDULER_DETERMINISM",
             Self::Sdio => "SDIO",
+            Self::ServoAutotrim => "SERVO_AUTOTRIM",
             Self::Smartaudio => "SMARTAUDIO",
             Self::SmithPredictor => "SMITH_PREDICTOR",
+            Self::Spa => "SPA",
             Self::SpmCells => "SPM_CELLS",
             Self::SpmVario => "SPM_VARIO",
             Self::SpmVs600 => "SPM_VS600",
             Self::Stack => "STACK",
             Self::TimingAccuracy => "TIMING_ACCURACY",
+            Self::Tpa => "TPA",
             Self::Usb => "USB",
             Self::Vibe => "VIBE",
             Self::VtxMsp => "VTX_MSP",
             Self::VtxTramp => "VTX_TRAMP",
             Self::WingLaunch => "WING_LAUNCH",
+            Self::WingSetpoint => "WING_SETPOINT",
         }
     }
 }
@@ -782,7 +803,14 @@ impl DebugMode {
             (87u32, Betaflight2026_6 | Betaflight4_5) => Some(Self::MagCalib),
             (88u32, Betaflight2026_6 | Betaflight4_5) => Some(Self::MagTaskRate),
             (89u32, Betaflight2026_6 | Betaflight4_5) => Some(Self::Ezlanding),
+            (90u32, Betaflight2026_6) => Some(Self::Tpa),
+            (91u32, Betaflight2026_6) => Some(Self::STerm),
+            (92u32, Betaflight2026_6) => Some(Self::Spa),
+            (95u32, Betaflight2026_6) => Some(Self::WingSetpoint),
             (101u32, Betaflight2026_6) => Some(Self::WingLaunch),
+            (102u32, Betaflight2026_6) => Some(Self::GpsRescueWing),
+            (103u32, Betaflight2026_6) => Some(Self::ServoAutotrim),
+            (104u32, Betaflight2026_6) => Some(Self::Autoland),
             _ => {
                 #[allow(clippy::redundant_closure_call)]
                 (|raw| tracing::error!("invalid debug mode: {raw}"))(raw);
