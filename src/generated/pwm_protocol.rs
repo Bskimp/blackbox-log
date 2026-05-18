@@ -61,49 +61,57 @@ impl PwmProtocol {
             (
                 0u32,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(Self::Standard),
             (
                 1u32,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(Self::Oneshot125),
             (
                 2u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Oneshot42),
             (2u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::Multishot),
             (
                 3u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Multishot),
             (3u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::Brushed),
             (
                 4u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Brushed),
             (4u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::Dshot150),
             (
                 5u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Dshot150),
             (5u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::Dshot300),
             (
                 6u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Dshot300),
             (6u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::Dshot600),
             (
                 7u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Dshot600),
             (
                 8u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Proshot1000),
             (
                 9u32,
-                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
+                | Betaflight4_6,
             ) => Some(Self::Disabled),
             _ => {
                 #[allow(clippy::redundant_closure_call)]

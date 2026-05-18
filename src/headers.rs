@@ -451,6 +451,7 @@ pub(crate) enum InternalFirmware {
     Betaflight4_3,
     Betaflight4_4,
     Betaflight4_5,
+    Betaflight4_6,
     Betaflight2025_12,
     Betaflight2026_6,
     Inav5,
@@ -466,6 +467,7 @@ impl InternalFirmware {
             | Self::Betaflight4_3
             | Self::Betaflight4_4
             | Self::Betaflight4_5
+            | Self::Betaflight4_6
             | Self::Betaflight2025_12
             | Self::Betaflight2026_6 => true,
             Self::Inav5 | Self::Inav6 | Self::Inav7 | Self::Inav8 => false,
@@ -495,6 +497,9 @@ impl From<Firmware> for InternalFirmware {
             Firmware::Betaflight(FirmwareVersion {
                 major: 4, minor: 5, ..
             }) => Self::Betaflight4_5,
+            Firmware::Betaflight(FirmwareVersion {
+                major: 4, minor: 6, ..
+            }) => Self::Betaflight4_6,
             Firmware::Betaflight(FirmwareVersion {
                 major: 2025,
                 minor: 12,

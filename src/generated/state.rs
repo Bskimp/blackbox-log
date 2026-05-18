@@ -184,16 +184,17 @@ impl State {
             (
                 0u32,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(Self::GpsFixHome),
             (
                 1u32,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(Self::GpsFix),
-            (2u32, Betaflight2026_6 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5) => {
-                Some(Self::GpsFixEver)
-            }
+            (
+                2u32,
+                Betaflight2026_6 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5 | Betaflight4_6,
+            ) => Some(Self::GpsFixEver),
             (2u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::CalibrateMag),
             (3u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::SmallAngle),
             (4u32, Inav5 | Inav6 | Inav7 | Inav8) => Some(Self::FixedWingLegacy),
@@ -231,16 +232,16 @@ impl State {
             (
                 Self::GpsFixHome,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(0u32),
             (
                 Self::GpsFix,
                 Betaflight2026_6 | Betaflight4_2 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5
-                | Inav5 | Inav6 | Inav7 | Inav8,
+                | Betaflight4_6 | Inav5 | Inav6 | Inav7 | Inav8,
             ) => Some(1u32),
             (
                 Self::GpsFixEver,
-                Betaflight2026_6 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5,
+                Betaflight2026_6 | Betaflight4_3 | Betaflight4_4 | Betaflight4_5 | Betaflight4_6,
             ) => Some(2u32),
             (Self::CalibrateMag, Inav5 | Inav6 | Inav7 | Inav8) => Some(2u32),
             (Self::SmallAngle, Inav5 | Inav6 | Inav7 | Inav8) => Some(3u32),

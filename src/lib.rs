@@ -120,7 +120,9 @@ const MARKER: &[u8] = b"H Product:Blackbox flight data recorder by Nicholas Sher
 // scheme starting with 2025.12, so supported versions are no longer a single
 // contiguous range.
 const BETAFLIGHT_SUPPORT: &[Range<FirmwareVersion>] = &[
-    FirmwareVersion::new(4, 2, 0)..FirmwareVersion::new(4, 6, 0),
+    // 4.6.x was the last semver release before BF switched to date-versioned.
+    // YAML support was previously missing for 4.6 — added this pass.
+    FirmwareVersion::new(4, 2, 0)..FirmwareVersion::new(4, 7, 0),
     FirmwareVersion::new(2025, 12, 0)..FirmwareVersion::new(2026, 0, 0),
     FirmwareVersion::new(2026, 6, 0)..FirmwareVersion::new(2026, 7, 0),
 ];
